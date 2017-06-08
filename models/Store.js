@@ -33,7 +33,8 @@ const storeSchema = new mongoose.Schema({
       type: String,
       required: 'You must supply an address!'
     }
-  }
+  },
+  photo: String
 });
 
 // Presave hook in mongoDB to autogenerate a slug field before soemone saves a store
