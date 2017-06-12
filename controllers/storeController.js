@@ -83,3 +83,14 @@ exports.getStoreBySlug = async (req, res, next) => {
   if(!store) return next();
   res.render('store', { store: store, title: store.name });
 }
+
+exports.getStoresbyTag = async (req, res) => {
+  const tag = req.params.tag;
+  const tagQuery = tag || { $exists: true };
+  const tagsPromise = Store.getTagsList();
+  const storesPromise = Store.find({ tags: tagQuery }); // find all stores where tag property includes tag const above
+  // await tagsPromise and storesPromise, store 1st result into 'tags' and 2nd into 'stores' const's. This is ES6 destructuring
+  const [tags, stores] = await Promise.all([tagsPromise, storesPromise]); 
+
+  res.render('tags', { tags, title: 'Tags', tag, stores }); 
+}
