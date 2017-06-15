@@ -19,7 +19,9 @@ const userSchema = new Schema({
     type: String,
     required: 'Please enter your name',
     trim: true
-  }
+  },
+  resetPasswordToken: String,
+  resetPasswordExpires: Date
 
 });
 
