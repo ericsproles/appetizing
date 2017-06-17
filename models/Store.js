@@ -41,6 +41,12 @@ const storeSchema = new mongoose.Schema({
   }
 });
 
+// Define our index
+storeSchema.index({
+  name: 'text',
+  description: 'text' 
+})
+
 // Presave hook in mongoDB to autogenerate a slug field before soemone saves a store
 storeSchema.pre('save', async function(next) {
   if (!this.isModified('name')) {

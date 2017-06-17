@@ -45,4 +45,11 @@ router.post('/account/reset/:token',
 //   res.send(reverse);
 // })
 
+/*
+  API
+*/
+
+router.get('/api/v1/search', catchErrors(storeController.searchStores));
+
+
 module.exports = router;
