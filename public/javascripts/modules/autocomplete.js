@@ -1,3 +1,5 @@
+// Autocomplete function to fill in latitude and longitude on Store page using Google Maps API 
+
 function autocomplete(input, latInput, lngInput) {
   if(!input) return; // skip this fn from running if there is not input on the page
   console.log(input, latInput, lngInput)
