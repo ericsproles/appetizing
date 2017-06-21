@@ -7,7 +7,6 @@ const { catchErrors } = require('../handlers/errorHandlers');
 
 // Do work here
 router.get('/', catchErrors(storeController.getStores));
-router.get('/stores', catchErrors(storeController.getStores));
 router.get('/add', authController.isLogginIn, storeController.addStore);
 router.post('/add',
   storeController.upload,
@@ -17,39 +16,49 @@ router.post('/add/:id',
   storeController.upload,
   catchErrors(storeController.resize),
   catchErrors(storeController.updateStore));
+
+router.get('/stores', catchErrors(storeController.getStores));
 router.get('/stores/:id/edit', catchErrors(storeController.editStore));
 router.get('/store/:slug', catchErrors(storeController.getStoreBySlug));
+
 router.get('/tags', catchErrors(storeController.getStoresbyTag));
 router.get('/tags/:tag', catchErrors(storeController.getStoresbyTag));
 
 router.get('/login', userController.loginForm);
 router.post('/login', authController.login)
-router.get('/register', userController.registerForm);
+router.get('/logout', authController.logout);
 
+router.get('/register', userController.registerForm);
 router.post('/register', 
   userController.validateRegister, // 1. Validate the registration data
   userController.register, // 2. Register the user
   authController.login  // 3. Log the user in
-  )
-router.get('/logout', authController.logout);
+)
 router.get('/account', authController.isLogginIn, userController.account);
 router.post('/account', catchErrors(userController.updateAccount));
 router.post('/account/forgot', catchErrors(authController.forgot));
 router.get('/account/reset/:token', catchErrors(authController.reset));
 router.post('/account/reset/:token', 
   authController.confirmedPasswords, 
-  catchErrors(authController.update))
+  catchErrors(authController.update)
+  );
+  
+router.get('/map', storeController.mapPage);
 
+/*
+ //////////////////////---------- API -----------///////////////////////////////
+*/
+
+router.get('/api/v1/search', catchErrors(storeController.searchStores));
+router.get('/api/v1/stores/near', catchErrors(storeController.mapStores))
+
+
+module.exports = router;
+
+
+
+// TEST CODE
 // router.get('/reverse/:name', (req, res) => {
 //   const reverse = [...req.params.name].reverse().join('');
 //   res.send(reverse);
 // })
-
-/*
-  API
-*/
-
-router.get('/api/v1/search', catchErrors(storeController.searchStores));
-
-
-module.exports = router;
