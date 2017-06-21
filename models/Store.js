@@ -41,10 +41,14 @@ const storeSchema = new mongoose.Schema({
   }
 });
 
-// Define our index
+// Define our indexes
 storeSchema.index({
   name: 'text',
   description: 'text' 
+})
+
+storeSchema.index({
+  location: '2dsphere'
 })
 
 // Presave hook in mongoDB to autogenerate a slug field before soemone saves a store
