@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Store = mongoose.model('Store');
+const User = mongoose.model('User');
 const multer = require('multer');
 const jimp = require('jimp')
 const uuid = require('uuid')
@@ -139,4 +140,17 @@ res.json(stores);
 
 exports.mapPage = (req, res) => {
   res.render('map', { title: 'Map' });
+}
+
+  // Get list of user's hearts (array), check if that heart is in that array, if it is, pull it(take out), if not it will set it(add it in) 
+exports.heartStore = async (req, res) => {
+  const hearts = req.user.hearts.map(obj => obj.toString());
+  // Is this store ID already in the array? If so, remove it. If not, add it
+  const operator = hearts.includes(req.params.id) ? '$pull' : '$addToSet';
+  const user = await User // find user and update hearts property
+    .findByIdAndUpdate(req.user.id,
+    { [operator]: { hearts: req.params.id }}, // because we put it in a variable we can use can use computed property name in a variable with es6, either replace itself with $pull or $addToSet
+    { new: true } // return updated user
+    )
+  res.json(user);
 }
