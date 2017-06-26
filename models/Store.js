@@ -39,7 +39,11 @@ const storeSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: 'User'
   }
-});
+}, {
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true },
+}
+);
 
 // Define our indexes
 storeSchema.index({
@@ -76,6 +80,36 @@ storeSchema.statics.getTagsList = function() {
     { $sort: { count: -1 } }
     ]);
 }
+
+storeSchema.statics.getTopStores = function() {
+  return this.aggregate([
+    // Lookup Stores and populate their reviews
+    { $lookup: {
+        from: 'reviews', // from 'Review'. NOTE: MongoDB lower cases it and adds an 's'.
+        localField: '_id', // how we link the two
+        foreignField: 'store', // how we link the two
+        as: 'reviews' } // can be named anything
+    }
+
+    // filter for only items that have 2 more reviews
+
+    // Add the average reviews field
+
+    // sort it by our new field, highest reviews first
+
+    // limit it to at most 10
+  ])
+}
+
+// find reviews where the stores _id property === reviews store property
+// NOTE: by default virtual fiedls do not go into an object or json unless specifically 
+// asked to (will not show in dump). Can change this by adding toJSON and toObject
+// in the model.
+storeSchema.virtual('reviews', { 
+  ref: 'Review', // what model to link?
+  localField: '_id', // which field on the store?
+  foreignField: 'store' // which field on the review?
+})
 
 module.exports = mongoose.model('Store', storeSchema);
  

@@ -48,6 +48,9 @@ router.get('/map', storeController.mapPage);
 
 router.get('/hearts', authController.isLogginIn, catchErrors(storeController.getHearts));
 
+router.get('/top', catchErrors(storeController.getTopStores));
+
+
 /*
  //////////////////////---------- API -----------///////////////////////////////
 */
