@@ -1,7 +1,6 @@
-/public/uploads/
-public/dist/App\.bundle\.js
-
-public/dist/App\.bundle\.js\.map
-
-public/dist/App.bundle.js
-
+node_modules/
+.DS_Store
+*.log
+.idea
+haters/
+variables.env
