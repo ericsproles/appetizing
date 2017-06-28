@@ -33,7 +33,7 @@ function autopopulate(next) {
   next();
 }
 
-reviewSchema.pre('find', autopopulate)
+reviewSchema.pre('find', autopopulate) // Add hooks so anytime someone uses find or findOne it autopopulates the author field
 reviewSchema.pre('findOne', autopopulate)
 
 module.exports = mongoose.model('Review', reviewSchema);
