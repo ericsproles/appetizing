@@ -1,6 +1,6 @@
 ## What is this?
 
-Just you wait folks!
+A Nodejs Express application for managing stores, star ratings, and reviews. Integrated with Google Maps API.
 
 ## Sample Data
 
