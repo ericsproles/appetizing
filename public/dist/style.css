@@ -445,10 +445,17 @@ body {
   font-size: 1.5rem;
   color: #303030; }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3 {
   font-size: 5rem;
   font-family: 'Panama';
   font-weight: 600;
+  letter-spacing: -1px; }
+
+h4, h5, h6 {
+  font-size: 2rem;
+  font-family: 'Panama';
+  font-weight: 600;
+  width: 90px;
   letter-spacing: -1px; }
 
 a {
@@ -538,12 +545,26 @@ label {
     color: white;
     outline: 0;
     border: 0; }
+  .search__homepage {
+    font-size: 25px;
+    background: white;
+    color: black;
+    outline: 0;
+    border: 0;
+    margin: 80px 0; }
   .search__result {
     padding: 10px;
     display: block;
     border-bottom: 1px solid #ececec; }
     .search__result--active {
       background: #f1f1f1; }
+  .search__label {
+    font-size: 25px;
+    color: black;
+    outline: 0;
+    border: 0;
+    text-align: center;
+    vertical-align: middle; }
 
 @keyframes slideIn {
   0% {
@@ -1060,7 +1081,9 @@ label {
   background: white;
   margin-top: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.05); }
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), 0 5px 10px rgba(0, 0, 0, 0.05);
+  position: absolute;
+  right: 100px; }
   .pagination__next {
     -ms-flex: 0 0 auto;
         flex: 0 0 auto;

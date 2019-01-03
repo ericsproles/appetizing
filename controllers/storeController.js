@@ -17,8 +17,28 @@ const multerOptions = {
   }
 }
 
-exports.homePage = (req, res) => {
-  res.render('index');
+exports.homePage = async (req, res) => {
+const page = req.params.page || 1;
+const limit = 4;
+const skip = (page * limit) - limit
+
+// Query the database for a list of all stores
+const storesPromise = Store
+  .find()
+  .skip(skip)
+  .limit(limit)
+  .sort({ created: 'desc' })
+
+const countPromise = Store.count();
+const [stores, count] = await Promise.all([storesPromise, countPromise]);
+const pages = Math.ceil(count / limit);
+if (!stores.length && skip) {
+  req.flash('info', `Hey! You asked for page ${page}. But that doesn't exist. So I put you on page ${pages}`);
+  res.redirect(`/stores/page/${pages}`);
+  return
+}
+// Pass data to stores template
+res.render('homePage', { title: 'Stores', stores, page, pages, count });
 };
 
 exports.addStore = (req, res) => {
@@ -52,10 +72,27 @@ exports.createStore = async (req, res) => {
 };
 
 exports.getStores = async (req, res) => {
+  const page = req.params.page || 1;
+  const limit = 4;
+  const skip = (page * limit) - limit
+
   // Query the database for a list of all stores
-  const stores = await Store.find();
+  const storesPromise = Store
+    .find()
+    .skip(skip)
+    .limit(limit)
+    .sort({ created: 'desc' })
+
+  const countPromise = Store.count();
+  const [stores, count] = await Promise.all([storesPromise, countPromise]);
+  const pages = Math.ceil(count / limit);
+  if (!stores.length && skip) {
+    req.flash('info', `Hey! You asked for page ${page}. But that doesn't exist. So I put you on page ${pages}`);
+    res.redirect(`/stores/page/${pages}`);
+    return
+  }
   // Pass data to stores template
-  res.render('stores', { title: 'Stores', stores });
+  res.render('stores', { title: 'Stores', stores, page, pages, count });
 }
 
 const confirmOwner = (store, user) => {
@@ -164,6 +201,5 @@ exports.getHearts = async (req, res) => {
 
 exports.getTopStores = async (req, res) => {
   const stores = await Store.getTopStores();
-  res.json(stores);
-  // res.render('topStores', { stores: '★ Top Stores!'})
+  res.render('topStores', {stores, title: '★ Top Stores'});
 }

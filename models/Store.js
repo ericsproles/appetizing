@@ -40,8 +40,8 @@ const storeSchema = new mongoose.Schema({
     ref: 'User'
   }
 }, {
-  toJSON: { virtuals: true },
-  toObject: { virtuals: true },
+  toJSON: { virtuals: true },  // So it shows up in .dump
+  toObject: { virtuals: true }, // So it shows up in .dump
 }
 );
 
@@ -88,16 +88,21 @@ storeSchema.statics.getTopStores = function() {
         from: 'reviews', // from 'Review'. NOTE: MongoDB lower cases it and adds an 's'.
         localField: '_id', // how we link the two
         foreignField: 'store', // how we link the two
-        as: 'reviews' } // can be named anything
-    }
-
+        as: 'reviews' } },// can be named anything
     // filter for only items that have 2 more reviews
-
+    { $match: { 'reviews.1': { $exists: true} }}, // where the second item in StoreReviews is true
     // Add the average reviews field
-
+    { $project: {  // add in all fields needed, with mongodb 3.4+ you can just use '$addfield'.
+      photo: '$$ROOT.photo',
+      name: '$$ROOT.name',
+      reviews: '$$ROOT.reviews',
+      slug: '$$ROOT.slug',
+      averageRating: { $avg: '$reviews.rating' }  // create new field 'averageRating' and set it to each of review's rating field
+    } },
     // sort it by our new field, highest reviews first
-
+    { $sort: { averageRating: -1 }},
     // limit it to at most 10
+    { $limit: 10 }
   ])
 }
 
@@ -110,6 +115,14 @@ storeSchema.virtual('reviews', {
   localField: '_id', // which field on the store?
   foreignField: 'store' // which field on the review?
 })
+
+function autopopulate(next) {
+  this.populate('reviews')
+  next();
+}
+
+storeSchema.pre('find', autopopulate);
+storeSchema.pre('findOne', autopopulate);
 
 module.exports = mongoose.model('Store', storeSchema);
  

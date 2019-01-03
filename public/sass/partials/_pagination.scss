@@ -5,6 +5,8 @@
   margin-top: 2rem;
   margin-bottom: 2rem;
   box-shadow: $shad;
+  position: absolute;
+  right: 100px;
   &__next {
     flex: 0 0 auto;
     padding: 1rem 3rem 1rem 1rem;

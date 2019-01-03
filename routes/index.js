@@ -7,7 +7,7 @@ const reviewController = require('../controllers/reviewController');
 const { catchErrors } = require('../handlers/errorHandlers');
 
 // Do work here
-router.get('/', catchErrors(storeController.getStores));
+router.get('/', catchErrors(storeController.homePage));
 router.get('/add', authController.isLogginIn, storeController.addStore);
 router.post('/add',
   storeController.upload,
@@ -19,6 +19,7 @@ router.post('/add/:id',
   catchErrors(storeController.updateStore));
 
 router.get('/stores', catchErrors(storeController.getStores));
+router.get('/stores/page/:page', catchErrors(storeController.getStores));
 router.get('/stores/:id/edit', catchErrors(storeController.editStore));
 router.get('/store/:slug', catchErrors(storeController.getStoreBySlug));
 
